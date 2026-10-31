@@ -35,10 +35,11 @@
         exit();
     }
 
-    // calculate the future value
+        // calculate the future value
     $future_value = $investment;
     for ($i = 1; $i <= $years; $i++) {
         $future_value += $future_value * $interest_rate *.01;
+        echo '<p>Year ' . $i . ': $' . number_format($future_value, 2) . '</p>';
     }
 
     // apply currency and percent formatting
