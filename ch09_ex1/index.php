@@ -9,36 +9,49 @@ $message = 'Enter some data and click on the Submit button.';
 $action = filter_input(INPUT_POST, 'action');
 
 switch ($action) {
-    case 'process_data':
+       case 'process_data':
         $name = filter_input(INPUT_POST, 'name');
         $email = filter_input(INPUT_POST, 'email');
         $phone = filter_input(INPUT_POST, 'phone');
 
-        /*************************************************
-         * validate and process the name
-         ************************************************/
-        // 1. make sure the user enters a name
-        // 2. display the name with only the first letter capitalized
+        /* validate and process the name */
+        $name = trim($name);
+        if (empty($name)) {
+            $message = 'You must enter a name.';
+            break;
+        }
+        $name = ucwords(strtolower($name));
+        $i = strpos($name, ' ');
+        if ($i === false) {
+            $first_name = $name;
+        } else {
+            $first_name = substr($name, 0, $i);
+        }
 
-        /*************************************************
-         * validate and process the email address
-         ************************************************/
-        // 1. make sure the user enters an email
-        // 2. make sure the email address has at least one @ sign and one dot character
+        /* validate and process the email address */
+        $email = trim($email);
+        if (empty($email)) {
+            $message = 'You must enter an email address.';
+            break;
+        }
+        if (strpos($email, '@') === false || strpos($email, '.') === false) {
+            $message = 'The email address must contain an @ sign and a dot character.';
+            break;
+        }
 
-        /*************************************************
-         * validate and process the phone number
-         ************************************************/
-        // 1. make sure the user enters at least seven digits, not including formatting characters
-        // 2. format the phone number like this 123-4567 or this 123-456-7890
+        /* validate and process the phone number */
+        $phone = trim($phone);
+        $digits = str_replace(array('-', ' ', '(', ')', '.'), '', $phone);
+        if (strlen($digits) < 7) {
+            $message = 'The phone number must contain at least seven digits.';
+            break;
+        }
 
-        /*************************************************
-         * Display the validation message
-         ************************************************/
-        $message = "This page is under construction.\n" .
-                   "Please write the code that processes the data.";
-
-        break;
-}
-include 'string_tester.php';
-?>
+        /* build the message */
+        $message = "Hello $first_name,\n\n" .
+                   "Thank you for entering this data:\n\n" .
+                   "Name: $name\n" .
+                   "Email: $email\n" .
+                   "Phone: $phone";
+        break;}
+        include 'string_tester.php';
